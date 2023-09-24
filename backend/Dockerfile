@@ -8,6 +8,10 @@ RUN npm ci
 
 COPY . .
 
+RUN npm install -g typescript
+
+RUN npm run build
+
 EXPOSE 4000
 
-CMD ["npm", "start"]
+CMD ["node", "dist/app.js"]
