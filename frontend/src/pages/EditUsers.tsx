@@ -227,7 +227,7 @@ export default function Edit() {
               fullWidth
               sx={{ mt: 3, mb: 2 }}
             >
-              Edit
+              Save
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

@@ -297,7 +297,7 @@ export default function AdminHome() {
                   Email
                 </StyledTableCell>
                 <StyledTableCell style={{ width: 160 }} align="left">
-                  role
+                  Role
                 </StyledTableCell>
                 <StyledTableCell style={{ width: 160 }} align="center">
                   Action

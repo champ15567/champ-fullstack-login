@@ -13,7 +13,7 @@ import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import Home from "./pages/Home.tsx";
 import AdminHome from "./pages/AdminHome.tsx";
-import Edit from "./pages/Edit.tsx";
+import Edit from "./pages/EditUsers.tsx";
 import PageNotFound from "./pages/PageNotFound.tsx";
 
 interface DataResponse {
@@ -140,7 +140,7 @@ function App() {
           }
         />
         <Route
-          path="/edit/:username"
+          path="/editusers/:username"
           element={
             token ? isAdmin ? <Edit /> : <Home /> : <Navigate to="/login" />
           }

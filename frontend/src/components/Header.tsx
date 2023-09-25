@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 // React and other
 import React from "react";
 import { UserProfile } from "../interfaces/User";
+import { Link } from "react-router-dom";
 
 function Header() {
   const handleLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -17,6 +18,8 @@ function Header() {
 
   const profileJSON = localStorage.getItem("profile") ?? "{}";
   const profile: UserProfile = JSON.parse(profileJSON);
+
+  const isAdmin = profile.role === "admin";
 
   return (
     <>
@@ -30,6 +33,29 @@ function Header() {
           <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
             {profile.username} ({profile.role ? profile.role : null})
           </Typography>
+          {isAdmin && (
+            <>
+              <Link to="/editusers" style={{ textDecoration: "none" }}>
+                <Button
+                  variant="contained"
+                  sx={{ my: 1, mx: 1.5 }}
+                  color="primary"
+                >
+                  Users
+                </Button>
+              </Link>
+
+              <Link to="/editproducts" style={{ textDecoration: "none" }}>
+                <Button
+                  variant="contained"
+                  sx={{ my: 1, mx: 1.5 }}
+                  color="primary"
+                >
+                  Products
+                </Button>
+              </Link>
+            </>
+          )}
 
           <Button
             variant="contained"
