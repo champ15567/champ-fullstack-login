@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User, { IUser } from "../models/User";
+import User, { IUser } from "../../models/User";
 
 export default async (req: Request, res: Response) => {
   try {
@@ -19,10 +19,11 @@ export default async (req: Request, res: Response) => {
         .json({ status: "error", message: "User not found" });
     }
 
+    await User.findByIdAndDelete(user._id);
+
     res.json({
       status: "ok",
-      message: "Get user",
-      user: { username: user.username, email: user.email, role: user.role },
+      message: "User deleted successfully",
     });
   } catch (error) {
     console.error(error);

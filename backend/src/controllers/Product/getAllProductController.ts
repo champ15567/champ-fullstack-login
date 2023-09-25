@@ -1,21 +1,24 @@
 import { Request, Response } from "express";
-import User, { IUser } from "../models/User";
+import Product, { IProduct } from "../../models/Product";
 
 export default async (req: Request, res: Response) => {
   try {
-    const users: IUser[] = await User.find({}, "username email role");
+    const products: IProduct[] = await Product.find(
+      {},
+      "code name description series  type"
+    );
 
-    if (users.length > 0) {
+    if (products.length > 0) {
       res.json({
         status: "ok",
-        message: "Users retrieved successfully",
-        users: users,
+        message: "Products retrieved successfully",
+        products: products,
       });
     } else {
       res.json({
         status: "ok",
-        message: "No users found",
-        users: [],
+        message: "No products found",
+        products: [],
       });
     }
   } catch (error) {

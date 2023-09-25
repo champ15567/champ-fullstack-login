@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import User, { IUser } from "../models/User";
+import User, { IUser } from "../../models/User";
 import bcrypt from "bcrypt";
 
 export default async (req: Request, res: Response, next: NextFunction) => {

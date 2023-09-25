@@ -19,6 +19,7 @@ import Footer from "../components/Footer";
 import { UserProfile } from "../interfaces/User";
 import { ResData } from "../interfaces/ApiData";
 import AlertComponent from "../components/AlertComponent";
+import { apiUsers } from "../apis/users";
 
 const defaultTheme = createTheme();
 
@@ -53,8 +54,8 @@ export default function Login() {
         password,
       };
       const response = await axios({
-        method: "post",
-        url: "http://localhost:4000/login",
+        method: apiUsers.login.method,
+        url: apiUsers.login.url,
         headers: {
           "Content-Type": "application/json",
         },

@@ -18,6 +18,7 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import AlertComponent from "../components/AlertComponent";
 import { ResData } from "../interfaces/ApiData";
+import { apiUsers } from "../apis/users";
 
 const defaultTheme = createTheme();
 
@@ -53,8 +54,8 @@ export default function Register() {
         email,
       };
       const response = await axios({
-        method: "post",
-        url: "http://localhost:4000/register",
+        method: apiUsers.createUsers.method,
+        url: apiUsers.createUsers.url,
         headers: {
           "Content-Type": "application/json",
         },

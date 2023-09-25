@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User, { IUser } from "../models/User";
+import User, { IUser } from "../../models/User";
 import jwt from "jsonwebtoken";
 
 export default async (req: Request, res: Response): Promise<void> => {

@@ -39,6 +39,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import axios from "axios";
 import AlertComponent from "../components/AlertComponent";
+import { apiUsers } from "../apis/users";
 
 //Table
 interface TablePaginationActionsProps {
@@ -197,34 +198,40 @@ export default function AdminHome() {
 
   const profileJSON = localStorage.getItem("profile") ?? "{}";
   const profile: UserProfile = JSON.parse(profileJSON);
+  const token = localStorage.getItem("token");
 
   //Get Data for table
   React.useEffect(() => {
-    axios({
-      method: "get",
-      url: "http://localhost:4000/users",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response: any) => {
+    const fetchData = async () => {
+      try {
+        const response = await axios({
+          method: apiUsers.getAllUsers.method,
+          url: apiUsers.getAllUsers.url,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         setRows(
           response.data.users.sort((a: any, b: any) =>
             a.calories < b.calories ? -1 : 1
           )
         );
-      })
-      .catch((error: any) => {
+      } catch (error: any) {
         setAlertSeverity("error");
         setAlertMessage([error.message]);
         setOpen(true);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setOpenDeleteDialog(false);
 
-    //Validate cant delete youeself acc
+    // Validate you can't delete yourself
     if (usernameToDelete === profile.username) {
       setAlertSeverity("error");
       setAlertMessage(["You can't delete yourself"]);
@@ -232,28 +239,28 @@ export default function AdminHome() {
       return;
     }
 
-    axios({
-      method: "delete",
-      url: `http://localhost:4000/delete/${usernameToDelete}`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(() => {
-        setAlertSeverity("success");
-        setAlertMessage(["User deleted successfully"]);
-        setOpen(true);
-      })
-      .then(() => {
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      })
-      .catch((error) => {
-        setAlertSeverity("error");
-        setAlertMessage([error.message]);
-        setOpen(true);
+    try {
+      await axios({
+        method: apiUsers.deleteUsers.method,
+        url: apiUsers.deleteUsers.url + usernameToDelete,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
+
+      setAlertSeverity("success");
+      setAlertMessage(["User deleted successfully"]);
+      setOpen(true);
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    } catch (error: any) {
+      setAlertSeverity("error");
+      setAlertMessage([error.message]);
+      setOpen(true);
+    }
   };
 
   return (

@@ -25,6 +25,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { ResEditUser } from "../interfaces/ApiData";
 import AlertComponent from "../components/AlertComponent";
+import { apiUsers } from "../apis/users";
 
 const defaultTheme = createTheme();
 
@@ -39,6 +40,7 @@ export default function Edit() {
   };
 
   const { username } = useParams();
+  const token = localStorage.getItem("token");
 
   const [formData, setFormData] = useState({
     username: "",
@@ -48,14 +50,29 @@ export default function Edit() {
   });
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:4000/user/${username}`)
-      .then((response) => {
-        setFormData(response.data.user);
-      })
-      .catch((error) => {
+    const fetchData = async () => {
+      try {
+        const response = await axios({
+          method: apiUsers.getOneUsers.method,
+          url: apiUsers.getOneUsers.url + username,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setFormData({
+          username: response.data.user.username,
+          email: response.data.user.email,
+          role: response.data.user.role,
+          password: "",
+        });
+      } catch (error) {
         console.error("Error fetching user:", error);
-      });
+      }
+    };
+
+    fetchData();
   }, [username]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -79,10 +96,11 @@ export default function Edit() {
         role,
       };
       const response = await axios({
-        method: "put",
-        url: `http://localhost:4000/edit/${username}`,
+        method: apiUsers.editUsers.method,
+        url: apiUsers.editUsers.url + username,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         data: jsonData,
       });
@@ -99,7 +117,7 @@ export default function Edit() {
         }, 500);
       } else {
         setAlertSeverity("error");
-        setAlertMessage([responseData.message + "An error occurred."]);
+        setAlertMessage([responseData.message]);
         setOpen(true);
       }
     } catch (error: any) {
@@ -109,7 +127,7 @@ export default function Edit() {
         setOpen(true);
       } else {
         setAlertSeverity("error");
-        setAlertMessage(error.message);
+        setAlertMessage([error.message]);
         setOpen(true);
       }
     }

@@ -6,6 +6,7 @@ import { useEffect } from "react";
 //Other
 import axios from "axios";
 import { UserProfile } from "./interfaces/User.ts";
+import { apiAuth } from "./apis/auth.ts";
 
 //Page
 import Login from "./pages/Login.tsx";
@@ -31,8 +32,8 @@ function App() {
     const validateToken = async () => {
       try {
         const response = await axios({
-          method: "post",
-          url: "http://localhost:4000/auth",
+          method: apiAuth.method,
+          url: apiAuth.url,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
