@@ -1,4 +1,5 @@
 tutorial
+node version 18.16.0
 
 backend (install)
 npm init --y
@@ -24,6 +25,7 @@ npm install @mui/icons-material
 npm i axios
 npm install react-router-dom
 npm install serve --save-dev
+
 วิธี run ใช้งาน
 npm run built
 npx serve -s dist
