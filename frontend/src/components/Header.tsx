@@ -7,7 +7,8 @@ import Typography from "@mui/material/Typography";
 // React and other
 import React from "react";
 import { UserProfile } from "../interfaces/User";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function Header() {
   const handleLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -18,7 +19,9 @@ function Header() {
 
   const profileJSON = localStorage.getItem("profile") ?? "{}";
   const profile: UserProfile = JSON.parse(profileJSON);
+  const location = useLocation();
 
+  const { username } = useParams();
   const isAdmin = profile.role === "admin";
 
   return (
@@ -29,42 +32,49 @@ function Header() {
         elevation={0}
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
-        <Toolbar sx={{ flexWrap: "wrap" }}>
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            {profile.username} ({profile.role ? profile.role : null})
-          </Typography>
-          {isAdmin && (
-            <>
-              <Link to="/editusers" style={{ textDecoration: "none" }}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Toolbar>
+            <Typography variant="h6" color="inherit" noWrap>
+              {profile.username} ({profile.role ? profile.role : null})
+            </Typography>
+
+            {isAdmin &&
+            (location.pathname === "/adminhome" ||
+              location.pathname === "/createuser" ||
+              username) ? (
+              <div style={{ display: "flex", justifyContent: "center" }}>
                 <Button
+                  variant="contained"
+                  sx={{ my: 1, mx: 1.5 }}
+                  href="/products"
+                >
+                  Products
+                </Button>
+              </div>
+            ) : (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <Button
+                  href="/adminhome"
                   variant="contained"
                   sx={{ my: 1, mx: 1.5 }}
                   color="primary"
                 >
                   Users
                 </Button>
-              </Link>
+              </div>
+            )}
+          </Toolbar>
 
-              <Link to="/editproducts" style={{ textDecoration: "none" }}>
-                <Button
-                  variant="contained"
-                  sx={{ my: 1, mx: 1.5 }}
-                  color="primary"
-                >
-                  Products
-                </Button>
-              </Link>
-            </>
-          )}
-
-          <Button
-            variant="contained"
-            sx={{ my: 1, mx: 1.5 }}
-            onClick={handleLogout}
-            color="error"
-          >
-            Logout
-          </Button>
+          <div>
+            <Button
+              variant="contained"
+              sx={{ my: 1, mx: 1.5 }}
+              onClick={handleLogout}
+              color="error"
+            >
+              Logout
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
       ;

@@ -144,7 +144,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 // End Table
 const defaultTheme = createTheme();
 
-export default function AdminHome() {
+export default function Home() {
   //Alert
   const [open, setOpen] = React.useState(false);
   const [alertMessage, setAlertMessage] = React.useState<string[]>([]);
@@ -239,7 +239,7 @@ export default function AdminHome() {
           color="text.primary"
           gutterBottom
         >
-          Product
+          Products
         </Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">

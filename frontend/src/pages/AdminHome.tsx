@@ -31,6 +31,7 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import DialogContentText from "@mui/material/DialogContentText";
 import { AlertProps } from "@mui/material/Alert";
+import Toolbar from "@mui/material/Toolbar";
 
 //React and Other
 import * as React from "react";
@@ -286,6 +287,27 @@ export default function AdminHome() {
         >
           Welcome Admin!
         </Typography>
+        <Toolbar
+          sx={{ display: "flex", justifyContent: "space-between", padding: 0 }}
+        >
+          <Typography
+            component="h1"
+            variant="h4"
+            align="center"
+            color="text.primary"
+            gutterBottom
+          >
+            Users
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{ my: 1, mx: 1.5 }}
+            color="primary"
+            href="/createuser"
+          >
+            Create User
+          </Button>
+        </Toolbar>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
             <TableHead>

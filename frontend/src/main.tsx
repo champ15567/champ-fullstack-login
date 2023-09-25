@@ -14,6 +14,7 @@ import Register from "./pages/Register.tsx";
 import Home from "./pages/Home.tsx";
 import AdminHome from "./pages/AdminHome.tsx";
 import Edit from "./pages/EditUsers.tsx";
+import CreateUser from "./pages/CreateUser.tsx";
 import PageNotFound from "./pages/PageNotFound.tsx";
 
 interface DataResponse {
@@ -143,6 +144,20 @@ function App() {
           path="/editusers/:username"
           element={
             token ? isAdmin ? <Edit /> : <Home /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/createuser"
+          element={
+            token ? (
+              isAdmin ? (
+                <CreateUser />
+              ) : (
+                <Home />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
           }
         />
         <Route
