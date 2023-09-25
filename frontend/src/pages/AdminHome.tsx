@@ -326,7 +326,7 @@ export default function AdminHome() {
                     <IconButton
                       style={{ color: "black" }}
                       component={Link}
-                      href={`/edit/${row.username}`}
+                      href={`/editusers/${row.username}`}
                     >
                       <EditIcon />
                     </IconButton>
