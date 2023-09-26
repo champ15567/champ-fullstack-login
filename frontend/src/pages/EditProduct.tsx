@@ -8,22 +8,23 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { AlertProps } from "@mui/material/Alert";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 //React And Other
 import * as React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { ResEditUser } from "../interfaces/ApiData";
+import { ResEditProduct } from "../interfaces/ApiData";
 import AlertComponent from "../components/AlertComponent";
-import { apiUsers } from "../apis/users";
+import { apiProducts } from "../apis/products";
 
 const defaultTheme = createTheme();
 
@@ -37,22 +38,23 @@ export default function Edit() {
     setOpen(false);
   };
 
-  const { username } = useParams();
+  const { code } = useParams();
   const token = localStorage.getItem("token");
 
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    role: "",
-    password: "",
+  const [formData, setFormData] = React.useState({
+    code: "",
+    name: "",
+    description: "",
+    series: "",
+    type: "other",
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios({
-          method: apiUsers.getOneUsers.method,
-          url: apiUsers.getOneUsers.url + username,
+          method: apiProducts.getOneProducts.method,
+          url: apiProducts.getOneProducts.url + code,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -60,28 +62,30 @@ export default function Edit() {
         });
 
         setFormData({
-          username: response.data.user.username,
-          email: response.data.user.email,
-          role: response.data.user.role,
-          password: "",
+          code: response.data.product.code,
+          name: response.data.product.name,
+          description: response.data.product.description,
+          series: response.data.product.series,
+          type: response.data.product.type,
         });
       } catch (error) {
-        console.error("Error fetching user:", error);
+        console.error("Error fetching product:", error);
       }
     };
 
     fetchData();
-  }, [username]);
+  }, [code]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const data = new FormData(event.currentTarget);
-      const email = data.get("email");
-      const password = data.get("password");
-      const role = data.get("role");
+      const name = data.get("name");
+      const description = data.get("description");
+      const series = data.get("series");
+      const type = data.get("type");
 
-      if (!email && !password && !role) {
+      if (!name && !series && !type) {
         setAlertSeverity("error");
         setAlertMessage(["Please fill in required fields."]);
         setOpen(true);
@@ -89,13 +93,15 @@ export default function Edit() {
       }
 
       const jsonData = {
-        password,
-        email,
-        role,
+        name,
+        description,
+        series,
+        type,
       };
+
       const response = await axios({
-        method: apiUsers.editUsers.method,
-        url: apiUsers.editUsers.url + username,
+        method: apiProducts.editProducts.method,
+        url: apiProducts.editProducts.url + code,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -103,7 +109,7 @@ export default function Edit() {
         data: jsonData,
       });
 
-      const responseData: ResEditUser = response.data;
+      const responseData: ResEditProduct = response.data;
       if (responseData.status === "ok") {
         //Alert
         setAlertSeverity("success");
@@ -111,7 +117,7 @@ export default function Edit() {
         setOpen(true);
 
         setTimeout(() => {
-          window.location.href = "/adminhome";
+          window.location.href = "/products";
         }, 500);
       } else {
         setAlertSeverity("error");
@@ -131,7 +137,21 @@ export default function Edit() {
     }
   };
 
-  const handleChange = (event: any) => {
+  const handleTextFieldChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleTextareaChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -160,60 +180,74 @@ export default function Edit() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  id="username"
-                  name="username"
-                  label="Username"
-                  autoComplete="username"
-                  disabled
+                  id="code"
+                  name="code"
+                  label="Code"
                   required
                   fullWidth
                   autoFocus
-                  value={formData.username}
-                  onChange={handleChange}
+                  disabled
+                  value={formData.code}
+                  onChange={handleTextFieldChange}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="email"
-                  name="email"
-                  label="Email Address"
-                  autoComplete="email"
+                  id="name"
+                  name="name"
+                  label="Name"
                   required
                   fullWidth
-                  value={formData.email}
-                  onChange={handleChange}
+                  value={formData.name}
+                  onChange={handleTextFieldChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextareaAutosize
+                  id="description"
+                  name="description"
+                  aria-label="minimum height"
+                  minRows={3}
+                  placeholder="Description"
+                  required
+                  style={{ width: "100%" }}
+                  value={formData.description}
+                  onChange={handleTextareaChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  id="series"
+                  name="series"
+                  type="series"
+                  label="Series"
+                  required
+                  fullWidth
+                  value={formData.series}
+                  onChange={handleTextFieldChange}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControl fullWidth>
-                  <InputLabel id="role-label">Role</InputLabel>
+                  <InputLabel id="type-label">Type</InputLabel>
                   <Select
-                    id="role"
-                    name="role"
-                    labelId="role-label"
-                    label="Role"
+                    id="type"
+                    name="type"
+                    labelId="type-label"
+                    label="Type"
                     required
                     fullWidth
-                    value={formData.role}
-                    onChange={handleChange}
+                    value={formData.type}
+                    onChange={handleSelectChange}
                   >
-                    <MenuItem value="admin">Admin</MenuItem>
-                    <MenuItem value="user">User</MenuItem>
+                    <MenuItem value="computer">Computer</MenuItem>
+                    <MenuItem value="electrical appliance">
+                      Electrical Appliance
+                    </MenuItem>
+                    <MenuItem value="accessories">Accessories</MenuItem>
+                    <MenuItem value="other">Other</MenuItem>
                   </Select>
                 </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  id="password"
-                  name="password"
-                  label="Password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  fullWidth
-                  value={formData.password}
-                  onChange={handleChange}
-                />
               </Grid>
             </Grid>
             <Button

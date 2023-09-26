@@ -17,7 +17,7 @@ import * as React from "react";
 import Footer from "../components/Footer";
 import axios from "axios";
 import AlertComponent from "../components/AlertComponent";
-import { ResData } from "../interfaces/ApiData";
+import { ResUserData } from "../interfaces/ApiData";
 import { apiUsers } from "../apis/users";
 
 const defaultTheme = createTheme();
@@ -62,7 +62,7 @@ export default function Register() {
         data: jsonData,
       });
 
-      const responseData: ResData = response.data;
+      const responseData: ResUserData = response.data;
       if (responseData.status === "ok") {
         localStorage.setItem("token", responseData.token);
         localStorage.setItem("profile", JSON.stringify(responseData.profile));

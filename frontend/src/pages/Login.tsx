@@ -17,7 +17,7 @@ import * as React from "react";
 import axios from "axios";
 import Footer from "../components/Footer";
 import { UserProfile } from "../interfaces/User";
-import { ResData } from "../interfaces/ApiData";
+import { ResUserData } from "../interfaces/ApiData";
 import AlertComponent from "../components/AlertComponent";
 import { apiUsers } from "../apis/users";
 
@@ -62,7 +62,7 @@ export default function Login() {
         data: jsonData,
       });
 
-      const responseData: ResData = response.data;
+      const responseData: ResUserData = response.data;
       if (responseData.status === "ok") {
         localStorage.setItem("token", responseData.token);
         localStorage.setItem("profile", JSON.stringify(responseData.profile));

@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import React from "react";
 import { UserProfile } from "../interfaces/User";
 import { useLocation } from "react-router-dom";
-import { useParams } from "react-router-dom";
 
 function Header() {
   const handleLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -21,7 +20,6 @@ function Header() {
   const profile: UserProfile = JSON.parse(profileJSON);
   const location = useLocation();
 
-  const { username } = useParams();
   const isAdmin = profile.role === "admin";
 
   return (
@@ -41,7 +39,7 @@ function Header() {
             {isAdmin &&
             (location.pathname === "/adminhome" ||
               location.pathname === "/createuser" ||
-              username) ? (
+              location.pathname.startsWith("/editusers")) ? (
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <Button
                   variant="contained"

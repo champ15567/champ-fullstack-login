@@ -1,4 +1,4 @@
-export interface ResData {
+export interface ResUserData {
   status: string;
   message: string;
   token: string;
@@ -8,6 +8,7 @@ export interface ResData {
     role: string;
   };
 }
+
 export interface ResEditUser {
   status: string;
   message: string;
@@ -15,5 +16,29 @@ export interface ResEditUser {
     username: string;
     email: string;
     role: string;
+  };
+}
+
+export interface ResProductsData {
+  status: string;
+  message: string;
+  products: {
+    code: string;
+    name: string;
+    series: string;
+    description: string;
+    type: "computer" | "electrical appliance" | "accessories" | "other";
+  };
+}
+
+export interface ResEditProduct {
+  status: string;
+  message: string;
+  products: {
+    code: string;
+    name: string;
+    series: string;
+    description: string;
+    type: "computer" | "electrical appliance" | "accessories" | "other";
   };
 }

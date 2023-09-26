@@ -15,6 +15,9 @@ import Home from "./pages/Home.tsx";
 import AdminHome from "./pages/AdminHome.tsx";
 import Edit from "./pages/EditUsers.tsx";
 import CreateUser from "./pages/CreateUser.tsx";
+import Products from "./pages/Products.tsx";
+import CreateProduct from "./pages/CreateProduct.tsx";
+import EditProduct from "./pages/EditProduct.tsx";
 import PageNotFound from "./pages/PageNotFound.tsx";
 
 interface DataResponse {
@@ -152,6 +155,40 @@ function App() {
             token ? (
               isAdmin ? (
                 <CreateUser />
+              ) : (
+                <Home />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            token ? isAdmin ? <Products /> : <Home /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/createproduct"
+          element={
+            token ? (
+              isAdmin ? (
+                <CreateProduct />
+              ) : (
+                <Home />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/editproducts/:code"
+          element={
+            token ? (
+              isAdmin ? (
+                <EditProduct />
               ) : (
                 <Home />
               )
